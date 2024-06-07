@@ -1,8 +1,7 @@
 import tasksJson from "../tasks.ts";
-import { define, kv, type User } from "../utils/fresh.ts";
+import { define, resolveUser, UserType } from "../utils/mod.ts";
 import { page } from "@fresh/core";
 import { getCookies } from "@std/http/cookie";
-
 import Task from "../components/task.tsx";
 
 export const handler = define.handlers({
@@ -12,23 +11,25 @@ export const handler = define.handlers({
 
 		const token = getCookies(ctx.req.headers)["token"];
 
+		/*
 		if (token) {
-			const { value: userId } = await kv.get<string | bigint>([
-				"sessions",
-				token,
-			]);
-			const { value: user } = await kv.get<User>(["users", userId!]);
-
+			const user = await resolveUser(token);
 			return page({ user, tasks: tasksJson });
 		} else {
 			return page({ user: null });
 		}
+		*/
+
+		// TODO(@heyk1n): buat data completed tasks untuk murid
+		return page({
+			user: token ? await resolveUser(token) : null,
+			tasks: tasksJson,
+		});
 	},
 });
 
 export default define.page<typeof handler>(({ data }) => {
 	const { user } = data;
-
 	return (
 		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
 			{user
@@ -44,9 +45,13 @@ export default define.page<typeof handler>(({ data }) => {
 							/>
 						</div>
 						<div class="bg-slate-300">
-							<aside>
-								<a href="/?tab=tasks">Tasks</a>
-							</aside>
+							{(user.type === UserType.Admin)
+								? (
+									<aside>
+										<a href="/?tab=tasks">Tasks</a>
+									</aside>
+								)
+								: null}
 						</div>
 						<div class="bg-gray-200 w-full h-full rounded-xl grid p-5 space-y-4 overflow-y-scroll">
 							{(data.tasks.length === 0) && (
@@ -60,7 +65,19 @@ export default define.page<typeof handler>(({ data }) => {
 						</div>
 					</div>
 				)
-				: <p>Selamat Datang!!</p>}
+				: (
+					<div class="space-y-4 grid">
+						<p class="place-self-center">Selamat datang!!</p>
+						<div class="space-y-3">
+							<a
+								class="bg-black text-white p-4 rounded-full"
+								href="/auth/login"
+							>
+								Login dengan token
+							</a>
+						</div>
+					</div>
+				)}
 		</div>
 	);
 });

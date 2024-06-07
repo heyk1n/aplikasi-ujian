@@ -4,7 +4,7 @@ import {
 	kv,
 	type User,
 	UserType,
-} from "../../utils/fresh.ts";
+} from "../../utils/mod.ts";
 import { OAuthApp } from "@octokit/oauth-app";
 import { setCookie, STATUS_CODE } from "@std/http";
 
