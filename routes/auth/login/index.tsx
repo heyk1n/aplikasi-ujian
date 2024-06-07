@@ -2,25 +2,12 @@ import { page } from "@fresh/core";
 import { getCookies, setCookie, STATUS_CODE } from "@std/http";
 import { define, kv } from "../../../utils/mod.ts";
 
-// gw
-// gw bantu bagian mana nih wir
-// bagian get coba, kalo ada "token" di cookies, langsung redirect ke "/"
-// gw sambil cek google dah, awkokoawkowak
-// belom pernah nyentuh sama sekalipun tsx
-// sesekali nyoba wkwkwk
-
-//function cookie_to_object( {
-
-//}
-export const handler = define.handlers({ // iya nhi awkowakoawk
+export const handler = define.handlers({
 	GET(ctx) {
 		const token = getCookies(ctx.req.headers)["token"];
 
-		if (token) {
-			return ctx.redirect("/");
-		} else {
-			return page();
-		}
+		if (token && (await kv.get<bigint | number>(["sessions", token])).value) return ctx.redirect("/");
+		return page();
 	},
 	async POST(ctx) {
 		// TODO: validasi token
