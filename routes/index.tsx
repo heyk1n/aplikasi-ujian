@@ -1,27 +1,66 @@
-import { useSignal } from "@preact/signals";
-import { define } from "../utils.ts";
-import Counter from "../islands/Counter.tsx";
+import tasksJson from "../tasks.ts";
+import { define, kv, type User } from "../utils/fresh.ts";
+import { page } from "@fresh/core";
+import { getCookies } from "@std/http/cookie";
 
-export default define.page(function Home() {
-  const count = useSignal(3);
+import Task from "../components/task.tsx";
 
-  return (
-    <div class="px-4 py-8 mx-auto bg-[#86efac]">
-      <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-        <img
-          class="my-6"
-          src="/logo.svg"
-          width="128"
-          height="128"
-          alt="the Fresh logo: a sliced lemon dripping with juice"
-        />
-        <h1 class="text-4xl font-bold">Welcome to Fresh</h1>
-        <p class="my-4">
-          Try updating this message in the
-          <code class="mx-2">./routes/index.tsx</code> file, and refresh.
-        </p>
-        <Counter count={count} />
-      </div>
-    </div>
-  );
-})
+export const handler = define.handlers({
+	async GET(ctx) {
+		const tab = ctx.url.searchParams.get("tab");
+		if (!tab) ctx.url.searchParams.set("tab", "tasks");
+
+		const token = getCookies(ctx.req.headers)["token"];
+
+		if (token) {
+			const { value: userId } = await kv.get<string | bigint>([
+				"sessions",
+				token,
+			]);
+			const { value: user } = await kv.get<User>(["users", userId!]);
+
+			return page({ user, tasks: tasksJson });
+		} else {
+			return page({ user: null });
+		}
+	},
+});
+
+export default define.page<typeof handler>(({ data }) => {
+	const { user } = data;
+
+	return (
+		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
+			{user
+				? (
+					<div class="w-full max-w-[600px] h-full max-h-72 space-y-4">
+						<div class="flex w-full justify-between relative">
+							<p class="font-bold text-3xl place-self-center select-none">
+								Hello {user.username}!
+							</p>
+							<img
+								src={user.avatar_url}
+								class="bg-black w-12 h-12 rounded-full place-self-center"
+							/>
+						</div>
+						<div class="bg-slate-300">
+							<aside>
+								<a href="/?tab=tasks">Tasks</a>
+							</aside>
+						</div>
+						<div class="bg-gray-200 w-full h-full rounded-xl grid p-5 space-y-4 overflow-y-scroll">
+							{(data.tasks.length === 0) && (
+								<p class="place-self-center text-gray-500 text-lg select-none">
+									Tidak ada tugas.
+								</p>
+							)}
+							{data.tasks.map((task) => (
+								<Task task={task}></Task>
+							))}
+						</div>
+					</div>
+				)
+				: <p>Selamat Datang!!</p>}
+		</div>
+	);
+});

@@ -1,13 +1,13 @@
 {
-    "build": {
-        "dockerfile": "dockerfile"
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-azuretools.vscode-docker",
-                "denoland.vscode-deno"
-            ]
-        }
-    }
+	"build": {
+		"dockerfile": "dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-docker",
+				"denoland.vscode-deno"
+			]
+		}
+	}
 }
