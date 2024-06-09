@@ -6,7 +6,9 @@ export const handler = define.handlers({
 	async GET(ctx) {
 		const token = getCookies(ctx.req.headers)["token"];
 
-		if (token && (await kv.get<bigint | number>(["sessions", token])).value) return ctx.redirect("/");
+		if (
+			token && (await kv.get<bigint | number>(["sessions", token])).value
+		) return ctx.redirect("/");
 		return page();
 	},
 	async POST(ctx) {
