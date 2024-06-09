@@ -3,7 +3,7 @@ import { getCookies, setCookie, STATUS_CODE } from "@std/http";
 import { define, kv } from "../../../utils/mod.ts";
 
 export const handler = define.handlers({
-	GET(ctx) {
+	async GET(ctx) {
 		const token = getCookies(ctx.req.headers)["token"];
 
 		if (token && (await kv.get<bigint | number>(["sessions", token])).value) return ctx.redirect("/");
