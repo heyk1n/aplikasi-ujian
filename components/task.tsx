@@ -1,7 +1,7 @@
 export interface Task {
 	title: string;
 	authorName: string;
-	id: ReturnType<typeof crypto.randomUUID>;
+	id: string;
 	questions: Question[];
 }
 

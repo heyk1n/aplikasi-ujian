@@ -37,6 +37,7 @@ export default define.page<typeof handler>((_ctx) => {
 			<form class="bg-white rounded-2xl shadow-lg p-5 grid place-items-center w-full max-w-72 space-y-3">
 				<p>Silahkan login!</p>
 				<input
+					type="password"
 					placeholder="kin.*****"
 					class="w-full rounded-full bg-slate-300 outline-none text-center p-2"
 				>

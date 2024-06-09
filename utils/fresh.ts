@@ -4,7 +4,3 @@ import { createDefine } from "@fresh/core";
 export interface State {}
 
 export const define = createDefine<State>();
-
-export function generateToken() {
-	return `kin.${crypto.randomUUID().replaceAll("-", "")}`;
-}

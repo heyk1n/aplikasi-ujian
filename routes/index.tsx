@@ -34,8 +34,8 @@ export default define.page<typeof handler>(({ data }) => {
 		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
 			{user
 				? (
-					<div class="w-full max-w-[600px] h-full max-h-72 space-y-4">
-						<div class="flex w-full justify-between relative">
+					<div class="w-full max-w-[600px] space-y-4">
+						<div class="flex w-full justify-between">
 							<p class="font-bold text-3xl place-self-center select-none">
 								Hello {user.username}!
 							</p>
@@ -44,16 +44,17 @@ export default define.page<typeof handler>(({ data }) => {
 								class="bg-black w-12 h-12 rounded-full place-self-center"
 							/>
 						</div>
-						<div class="bg-slate-300">
+						<div>
 							{(user.type === UserType.Admin)
 								? (
-									<aside>
+									<aside class="space-x-3">
 										<a href="/?tab=tasks">Tasks</a>
+										<a href="/?tab=accounts">Accounts</a>
 									</aside>
 								)
 								: null}
 						</div>
-						<div class="bg-gray-200 w-full h-full rounded-xl grid p-5 space-y-4 overflow-y-scroll">
+						<div class="bg-gray-200 w-full max-h-80 rounded-xl grid p-5 space-y-4 overflow-y-scroll">
 							{(data.tasks.length === 0) && (
 								<p class="place-self-center text-gray-500 text-lg select-none">
 									Tidak ada tugas.
@@ -66,14 +67,25 @@ export default define.page<typeof handler>(({ data }) => {
 					</div>
 				)
 				: (
-					<div class="space-y-4 grid">
-						<p class="place-self-center">Selamat datang!!</p>
-						<div class="space-y-3">
+					<div class="space-y-6 grid place-items-center w-full max-w-72 select-none">
+						<p class="font-bold text-lg place-self-center">
+							Welcome to exam app!!
+						</p>
+						<div class="space-y-1 w-full grid place-items-center">
 							<a
-								class="bg-black text-white p-4 rounded-full"
+								class="bg-black text-white py-2 grid place-items-center rounded-full w-full"
 								href="/auth/login"
 							>
-								Login dengan token
+								Login with token
+							</a>
+							<p class="text-sm text-slate-500">or</p>
+							<a
+								class="bg-gradient-to-r from-yellow-300 to-yellow-500 text-black py-2 grid place-items-center rounded-full w-full"
+								href={`https://github.com/apps/${
+									Deno.env.get("GITHUB_APP_NAME")
+								}/installations/new`}
+							>
+								Login as admin
 							</a>
 						</div>
 					</div>

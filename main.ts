@@ -1,10 +1,9 @@
-import { App, fsRoutes, staticFiles } from "@fresh/core";
+import { App, fsRoutes, staticFiles, trailingSlashes } from "@fresh/core";
 import { State } from "./utils/fresh.ts";
 
 export const app = new App<State>();
 app.use(staticFiles());
-
-app.get("/api/:joke", () => new Response("Hello World"));
+app.use(trailingSlashes("never"));
 
 await fsRoutes(app, {
 	dir: "./",

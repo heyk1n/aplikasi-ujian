@@ -7,7 +7,22 @@ export default function ({ task }: { task: Task }) {
 	const { text, choices } = task.questions[questionId];
 
 	return (
-		<div>
+		<div class="space-y-2">
+			<div class="flex space-x-3 bg-gray-100 rounded-xl p-3">
+				{task.questions.map((_, questionIndex) => (
+					<button
+						class={`w-8 h-8 bg-${
+							(questionId === questionIndex) ? "black" : "white"
+						} rounded-full text-${
+							(questionId === questionIndex) ? "white" : "black"
+						}`}
+						onClick={() => setQuestionId(questionIndex)}
+					>
+						{questionIndex + 1}
+					</button>
+				))}
+			</div>
+
 			<div class="bg-white w-full rounded-xl p-3 shadow-xl grid text-center space-y-5">
 				<p class="place-self-center">{text}</p>
 				<div class="space-y-2">

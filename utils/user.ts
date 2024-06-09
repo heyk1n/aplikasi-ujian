@@ -14,20 +14,24 @@ export interface User {
 	type: UserType;
 }
 
+export function generateToken() {
+	return `kin.${crypto.randomUUID().replaceAll("-", "")}`;
+}
+
 export async function resolveUser(token: string): Promise<User> {
 	const { value: userId } = await kv.get<number | bigint>([
 		"sessions",
 		token,
 	]);
-	const { value: user } = await kv.get<User>(["users", userId!]);
 
-	/*
-	if (!user) throw new HttpError(STATUS_CODE.Unauthorized)}
-    else return user;
-	*/
-	return !user
-		? (() => {
-			throw new HttpError(STATUS_CODE.Unauthorized);
-		})()
-		: user;
+	if (!userId) {
+		throw new HttpError(STATUS_CODE.Unauthorized);
+	} else {
+		const { value: user } = await kv.get<User>(["users", userId]);
+		if (!user) {
+			throw new HttpError(STATUS_CODE.NotFound);
+		} else {
+			return user;
+		}
+	}
 }
