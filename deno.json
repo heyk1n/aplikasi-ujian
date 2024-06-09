@@ -19,7 +19,7 @@
 		"**/_fresh/*"
 	],
 	"imports": {
-		"@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.14",
+		"@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.16",
 		"@fresh/plugin-tailwind": "jsr:@fresh/plugin-tailwind@^0.0.1-alpha.7",
 		"@octokit/oauth-app": "npm:@octokit/oauth-app@7.1.2",
 		"@preact/signals": "npm:@preact/signals@^1.2.3",
