@@ -45,7 +45,12 @@ export const handler = define.handlers({
 			const headers = new Headers();
 
 			headers.set("location", "/");
-			setCookie(headers, { name: "token", value: token, path: "/" });
+			setCookie(headers, {
+				name: "token",
+				value: token,
+				path: "/",
+				secure: true,
+			});
 
 			return new Response(null, {
 				headers,
