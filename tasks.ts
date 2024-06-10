@@ -24,72 +24,16 @@ export default [
 					"peduli ap gue",
 				],
 			},
-		],
-	},
-	{
-		title: "sama aja",
-		authorName: "heyk1n",
-		id: String(snowflake.generate()),
-		questions: [
 			{
-				text: "pertanyaan akan terlihat disini",
-				choices: [
-					"oke",
-					"sip",
-					"ini jawaban ketiga",
-					"jawaban keempat",
-				],
-			},
-			{
-				text: "soal kedua nih",
+				text: "soal ketiga nih",
 				choices: [
 					"y",
 					"ywdh sih",
 					"peduli ap gue",
 				],
 			},
-		],
-	},
-	{
-		title: "tugas ketiga",
-		authorName: "heyk1n",
-		id: String(snowflake.generate()),
-		questions: [
 			{
-				text: "pertanyaan akan terlihat disini",
-				choices: [
-					"oke",
-					"sip",
-					"ini jawaban ketiga",
-					"jawaban keempat",
-				],
-			},
-			{
-				text: "soal kedua nih",
-				choices: [
-					"y",
-					"ywdh sih",
-					"peduli ap gue",
-				],
-			},
-		],
-	},
-	{
-		title: "ini last",
-		authorName: "heyk1n",
-		id: String(snowflake.generate()),
-		questions: [
-			{
-				text: "pertanyaan akan terlihat disini",
-				choices: [
-					"oke",
-					"sip",
-					"ini jawaban ketiga",
-					"jawaban keempat",
-				],
-			},
-			{
-				text: "soal kedua nih",
+				text: "soal keempat nih",
 				choices: [
 					"y",
 					"ywdh sih",

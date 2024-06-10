@@ -41,7 +41,7 @@ export default define.page<typeof handler>(({ data }) => {
 							</p>
 							<img
 								src={user.avatar_url}
-								class="bg-black w-12 h-12 rounded-full place-self-center"
+								class="bg-black w-12 h-12 rounded-full place-self-center pointer-events-none"
 							/>
 						</div>
 						<div>
@@ -54,7 +54,7 @@ export default define.page<typeof handler>(({ data }) => {
 								)
 								: null}
 						</div>
-						<div class="bg-gray-200 w-full max-h-80 rounded-xl grid p-5 space-y-4 overflow-y-scroll">
+						<div class="bg-gray-200 w-full h-full max-h-80 rounded-xl grid p-5 space-y-4 overflow-y-scroll">
 							{(data.tasks.length === 0) && (
 								<p class="place-self-center text-gray-500 text-lg select-none">
 									Tidak ada tugas.
