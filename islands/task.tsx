@@ -10,7 +10,7 @@ export default function ({ task }: { task: Task }) {
 	);
 
 	return (
-		<div class="space-y-2">
+		<div class="space-y-2 select-none">
 			<div class="flex space-x-3 bg-gray-100 rounded-xl p-3">
 				{task.questions.map((_, questionIndex) => (
 					<button
