@@ -13,7 +13,7 @@ export const handler = define.handlers({
 export default define.page<typeof handler>(({ data }) => {
 	return (
 		<div class="bg-white w-dvw h-dvh p-10 grid">
-			<div class="place-self-center w-full">
+			<div class="place-self-center w-full max-w-96">
 				<Task task={data}></Task>
 			</div>
 		</div>

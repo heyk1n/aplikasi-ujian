@@ -5,6 +5,9 @@ import { type Task } from "../components/task.tsx";
 export default function ({ task }: { task: Task }) {
 	const [questionId, setQuestionId] = useState(0);
 	const { text, choices } = task.questions[questionId];
+	const [myChoices, setMyChoices] = useState<(number | null)[]>(
+		choices.map(() => null),
+	);
 
 	return (
 		<div class="space-y-2">
@@ -28,13 +31,12 @@ export default function ({ task }: { task: Task }) {
 				<div class="space-y-2">
 					{choices.map((choice, id) => (
 						<Choice
+							selected={myChoices[questionId] === id}
 							id={id}
 							label={choice}
-							onClick={() => {
-								return;
-							}}
-						>
-						</Choice>
+							onClick={() =>
+								setMyChoices(myChoices.with(questionId, id))}
+						/>
 					))}
 					<div class="grid place-items-center">
 						<div class="flex space-x-5">
