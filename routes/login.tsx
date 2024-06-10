@@ -1,6 +1,6 @@
 import { page } from "@fresh/core";
 import { getCookies, setCookie, STATUS_CODE } from "@std/http";
-import { define, kv } from "..//utils/mod.ts";
+import { define, kv } from "../utils/mod.ts";
 
 export const handler = define.handlers({
 	async GET(ctx) {
