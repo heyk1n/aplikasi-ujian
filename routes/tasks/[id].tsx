@@ -12,8 +12,8 @@ export const handler = define.handlers({
 
 export default define.page<typeof handler>(({ data }) => {
 	return (
-		<div class="bg-white w-dvw h-dvh p-10 grid">
-			<div class="place-self-center w-full max-w-[500px]">
+		<div class="flex bg-white w-dvw h-dvh p-10 grid">
+			<div class="grow place-self-center w-full max-w-[500px] h-full max-h-96">
 				<Task task={data}></Task>
 			</div>
 		</div>

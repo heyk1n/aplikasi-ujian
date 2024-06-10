@@ -34,7 +34,7 @@ export default define.page<typeof handler>(({ data }) => {
 		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
 			{user
 				? (
-					<div class="w-full max-w-[600px] space-y-4">
+					<div class="flex flex-col w-full max-w-[600px] h-full max-h-96 space-y-4">
 						<div class="flex w-full justify-between">
 							<p class="font-bold text-3xl place-self-center select-none">
 								Hello {user.username}!
@@ -54,7 +54,7 @@ export default define.page<typeof handler>(({ data }) => {
 								)
 								: null}
 						</div>
-						<div class="bg-gray-200 w-full h-full max-h-80 rounded-xl grid p-5 space-y-4 overflow-y-scroll">
+						<div class="bg-gray-200 grow rounded-xl grid p-5 space-y-4 overflow-y-scroll">
 							{(data.tasks.length === 0) && (
 								<p class="place-self-center text-gray-500 text-lg select-none">
 									Tidak ada tugas.

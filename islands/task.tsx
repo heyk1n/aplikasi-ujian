@@ -6,12 +6,12 @@ export default function ({ task }: { task: Task }) {
 	const [questionId, setQuestionId] = useState(0);
 	const { text, choices } = task.questions[questionId];
 	const [myChoices, setMyChoices] = useState<(number | null)[]>(
-		choices.map(() => null),
+		task.questions.map(() => null),
 	);
 
 	return (
-		<div class="space-y-2 select-none">
-			<div class="flex space-x-3 bg-gray-100 rounded-xl p-3">
+		<div class="flex flex-col h-full space-y-3 select-none">
+			<div class="flex space-x-3 bg-gray-100 rounded-xl p-3 shadow-lg">
 				{task.questions.map((_, questionIndex) => (
 					<button
 						class={`w-8 h-8 bg-${
@@ -25,8 +25,7 @@ export default function ({ task }: { task: Task }) {
 					</button>
 				))}
 			</div>
-
-			<div class="bg-white w-full rounded-xl p-3 shadow-xl grid text-center space-y-5">
+			<div class="bg-white grow rounded-xl p-3 shadow-xl grid text-center space-y-5 overflow-y-scroll overflow-hidden">
 				<p class="place-self-center">{text}</p>
 				<div class="space-y-2">
 					{choices.map((choice, id) => (
@@ -59,6 +58,11 @@ export default function ({ task }: { task: Task }) {
 					</div>
 				</div>
 			</div>
+			{!myChoices.includes(null) && (
+				<button class="bg-gradient-to-r from-yellow-300 to-yellow-500 text-black py-2 grid place-items-center rounded-full w-full">
+					Complete Task
+				</button>
+			)}
 		</div>
 	);
 }
