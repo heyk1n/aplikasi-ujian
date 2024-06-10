@@ -74,7 +74,7 @@ export default define.page<typeof handler>(({ data }) => {
 						<div class="space-y-1 w-full grid place-items-center">
 							<a
 								class="bg-black text-white py-2 grid place-items-center rounded-full w-full"
-								href="/auth/login"
+								href="/login"
 							>
 								Login with token
 							</a>
