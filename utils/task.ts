@@ -21,7 +21,7 @@ export async function createTask(
 		], { ...user, tasks: [...user.tasks, id] })
 			.commit();
 		if (result.ok) {
-			return id;
+			return newTask;
 		} else {
 			throw new Error("Task creation failed.");
 		}
