@@ -20,8 +20,8 @@ export const handler = define.handlers({
 			if (!isTeacherUser(user)) {
 				throw unauthorized;
 			} else {
-                const newTask = await ctx.req.json();
-                return Response.json(await createTask(newTask, user));
+				const newTask = await ctx.req.json();
+				return Response.json(await createTask(newTask, user));
 			}
 		}
 	},
