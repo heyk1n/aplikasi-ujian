@@ -8,11 +8,23 @@ export enum UserType {
 	Student,
 }
 
-export interface User {
+export interface BaseUser<T extends UserType> {
 	avatar_url?: string;
 	username: string;
-	type: UserType;
+	type: T;
 }
+
+export interface StudentUser extends BaseUser<UserType.Student> {
+	completedTasks: string[];
+}
+
+export interface TeacherUser extends BaseUser<UserType.Teacher> {
+	tasks: string[];
+}
+
+export type AdminUser = BaseUser<UserType.Admin>;
+
+export type User = StudentUser | TeacherUser | AdminUser;
 
 export function generateToken() {
 	return `kin.${crypto.randomUUID().replaceAll("-", "")}`;
