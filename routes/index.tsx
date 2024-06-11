@@ -1,5 +1,10 @@
 import tasksJson from "../tasks.ts";
-import { define, resolveUser, UserType } from "../utils/mod.ts";
+import {
+	define,
+	generateAuthorizationUrl,
+	resolveUser,
+	UserType,
+} from "../utils/mod.ts";
 import { page } from "@fresh/core";
 import { getCookies } from "@std/http/cookie";
 import Task from "../components/task.tsx";
@@ -11,41 +16,35 @@ export const handler = define.handlers({
 
 		const token = getCookies(ctx.req.headers)["token"];
 
-		/*
 		if (token) {
 			const user = await resolveUser(token);
 			return page({ user, tasks: tasksJson });
 		} else {
-			return page({ user: null });
+			return page({
+				user: null,
+				authorizeUrl: generateAuthorizationUrl(),
+			});
 		}
-		*/
-
-		// TODO(@heyk1n): buat data completed tasks untuk murid
-		return page({
-			user: token ? await resolveUser(token) : null,
-			tasks: tasksJson,
-		});
 	},
 });
 
 export default define.page<typeof handler>(({ data }) => {
-	const { user } = data;
 	return (
 		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
-			{user
+			{data.user
 				? (
 					<div class="flex flex-col w-full max-w-[600px] h-full max-h-96 space-y-4">
 						<div class="flex w-full justify-between">
 							<p class="font-bold text-3xl place-self-center select-none">
-								Hello {user.username}!
+								Hello {data.user.username}!
 							</p>
 							<img
-								src={user.avatar_url}
+								src={data.user.avatar_url}
 								class="bg-black w-12 h-12 rounded-full place-self-center pointer-events-none"
 							/>
 						</div>
 						<div>
-							{(user.type === UserType.Admin)
+							{(data.user.type === UserType.Admin)
 								? (
 									<aside class="space-x-3">
 										<a href="/?tab=tasks">Tasks</a>
@@ -81,9 +80,7 @@ export default define.page<typeof handler>(({ data }) => {
 							<p class="text-sm text-slate-500">or</p>
 							<a
 								class="bg-gradient-to-r from-yellow-300 to-yellow-500 text-black py-2 grid place-items-center rounded-full w-full"
-								href={`https://github.com/apps/${
-									Deno.env.get("GITHUB_APP_NAME")
-								}/installations/new`}
+								href={data.authorizeUrl.url}
 							>
 								Login as admin
 							</a>
