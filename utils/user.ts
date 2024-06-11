@@ -2,30 +2,6 @@ import { kv } from "./mod.ts";
 import { STATUS_CODE } from "@std/http/status";
 import { HttpError } from "@fresh/core";
 
-export enum UserType {
-	Admin,
-	Teacher,
-	Student,
-}
-
-export interface BaseUser<T extends UserType> {
-	avatar_url?: string;
-	username: string;
-	type: T;
-}
-
-export interface StudentUser extends BaseUser<UserType.Student> {
-	completedTasks: string[];
-}
-
-export interface TeacherUser extends BaseUser<UserType.Teacher> {
-	tasks: string[];
-}
-
-export type AdminUser = BaseUser<UserType.Admin>;
-
-export type User = StudentUser | TeacherUser | AdminUser;
-
 export function generateToken() {
 	return `kin.${crypto.randomUUID().replaceAll("-", "")}`;
 }
@@ -47,3 +23,32 @@ export async function resolveUser(token: string): Promise<User> {
 		}
 	}
 }
+
+export function isTeacherUser(user: User): user is TeacherUser {
+	return user.type === UserType.Teacher;
+}
+
+export enum UserType {
+	Admin,
+	Teacher,
+	Student,
+}
+
+export interface BaseUser<T extends UserType> {
+	avatar_url?: string;
+	username: string;
+	id: string;
+	type: T;
+}
+
+export interface StudentUser extends BaseUser<UserType.Student> {
+	completedTasks: string[];
+}
+
+export interface TeacherUser extends BaseUser<UserType.Teacher> {
+	tasks: string[];
+}
+
+export type AdminUser = BaseUser<UserType.Admin>;
+
+export type User = StudentUser | TeacherUser | AdminUser;

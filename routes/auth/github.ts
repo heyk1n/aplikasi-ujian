@@ -32,6 +32,7 @@ export const handler = define.handlers({
 				{
 					avatar_url: user.avatar_url,
 					username: user.login,
+					id: String(user.id),
 					type: UserType.Admin,
 				} satisfies User,
 			).commit();

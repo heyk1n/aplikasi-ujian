@@ -1,10 +1,12 @@
 import { DiscordSnowflake as snowflake } from "@sapphire/snowflake";
-import { type Task } from "./components/task.tsx";
+import { type Task } from "./utils/task.ts";
 
 export default [
 	{
-		title: "tugas ulangan",
-		authorName: "heyk1n",
+		name: "tugas ulangan",
+		author: {
+			username: "heyk1n",
+		},
 		id: String(snowflake.generate()),
 		questions: [
 			{
