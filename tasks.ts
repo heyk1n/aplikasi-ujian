@@ -8,6 +8,7 @@ export default [
 			username: "heyk1n",
 		},
 		id: String(snowflake.generate()),
+		endDate: Date.now() + (60 * 60 * 1000),
 		questions: [
 			{
 				text: "pertanyaan akan terlihat disini",

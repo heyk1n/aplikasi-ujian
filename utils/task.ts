@@ -34,6 +34,7 @@ export interface Task {
 	name: string;
 	author: Pick<TeacherUser, "avatar_url" | "username">;
 	id: string;
+	endDate: number;
 	questions: TaskQuestion[];
 }
 

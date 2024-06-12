@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import Choice from "../components/choice.tsx";
-import { type Task } from "../components/task.tsx";
+import Countdown from "./countdown.tsx";
+import { type Task } from "../utils/task.ts";
 
 export default function ({ task }: { task: Task }) {
 	const [questionId, setQuestionId] = useState(0);
@@ -11,6 +12,9 @@ export default function ({ task }: { task: Task }) {
 
 	return (
 		<div class="flex flex-col h-full space-y-3 select-none">
+			<div class="grid place-items-center w-full">
+				<Countdown time={task.endDate} />
+			</div>
 			<div class="flex space-x-3 bg-gray-100 rounded-xl p-3 shadow-lg">
 				{task.questions.map((_, questionIndex) => (
 					<button
