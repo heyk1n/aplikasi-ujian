@@ -2,23 +2,50 @@ import tasksJson from "../tasks.ts";
 import {
 	define,
 	generateAuthorizationUrl,
+	isAdminUser,
 	resolveUser,
-	UserType,
+	TabsType,
 } from "../utils/mod.ts";
-import { page } from "@fresh/core";
-import { getCookies } from "@std/http/cookie";
+import { HttpError, page } from "@fresh/core";
+import { getCookies, STATUS_CODE } from "@std/http";
 import Task from "../components/task.tsx";
 
 export const handler = define.handlers({
 	async GET(ctx) {
-		const tab = ctx.url.searchParams.get("tab");
-		if (!tab) ctx.url.searchParams.set("tab", "tasks");
-
 		const token = getCookies(ctx.req.headers)["token"];
 
 		if (token) {
 			const user = await resolveUser(token);
-			return page({ user, tasks: tasksJson });
+			if (isAdminUser(user)) {
+				const tab = ctx.url.searchParams.get("tab");
+				if (!tab) {
+					return ctx.redirect("/?tab=tasks");
+				} else {
+					switch (tab) {
+						case TabsType.Tasks: {
+							return page({
+								user,
+								tab,
+								tasks: tasksJson,
+								users: null,
+							});
+						}
+						case TabsType.Users: {
+							return page({
+								user,
+								tab,
+								tasks: null,
+								users: [],
+							});
+						}
+						default: {
+							throw new HttpError(STATUS_CODE.NotFound);
+						}
+					}
+				}
+			} else {
+				return page({ user, tab: null, tasks: tasksJson, users: null });
+			}
 		} else {
 			return page({
 				user: null,
@@ -33,9 +60,9 @@ export default define.page<typeof handler>(({ data }) => {
 		<div class="grid place-items-center w-dvw h-dvh bg-white p-10">
 			{data.user
 				? (
-					<div class="flex flex-col w-full max-w-[600px] h-full max-h-96 space-y-4">
+					<div class="flex flex-col w-full max-w-[600px] h-full md:max-h-[500px] space-y-4 select-none overflow-y-auto">
 						<div class="flex w-full justify-between">
-							<p class="font-bold text-3xl place-self-center select-none">
+							<p class="font-bold text-3xl place-self-center">
 								Hello {data.user.username}!
 							</p>
 							<img
@@ -44,30 +71,56 @@ export default define.page<typeof handler>(({ data }) => {
 							/>
 						</div>
 						<div>
-							{(data.user.type === UserType.Admin)
-								? (
+							{(isAdminUser(data.user)) &&
+								(
 									<aside class="space-x-3">
 										<a href="/?tab=tasks">Tasks</a>
-										<a href="/?tab=accounts">Accounts</a>
+										<a href="/?tab=users">Users</a>
 									</aside>
+								)}
+						</div>
+						{isAdminUser(data.user)
+							? (
+								<div class="flex justify-between">
+									<div class="h-full grid place-items-center">
+										{data.tab === TabsType.Tasks
+											? <p>{data.tasks.length} tasks</p>
+											: <p>{data.users!.length} users</p>}
+									</div>
+									<a href={`/${data.tab}/new`}>
+										<div class="bg-black rounded-full px-4 py-1 text-white select-none">
+											Create
+										</div>
+									</a>
+								</div>
+							)
+							: null}
+						<div class="bg-gray-200 grow rounded-xl grid p-5 space-y-4 overflow-y-scroll">
+							{data.tasks
+								? (
+									data.tasks.length > 0
+										? data.tasks.map((task) => (
+											<Task task={task} />
+										))
+										: (
+											<p class="place-self-center text-gray-500 text-lg">
+												Tidak ada tugas.
+											</p>
+										)
+								)
+								: data.users.length === 0
+								? (
+									<p class="place-self-center text-gray-500 text-lg">
+										Tidak ada akun.
+									</p>
 								)
 								: null}
-						</div>
-						<div class="bg-gray-200 grow rounded-xl grid p-5 space-y-4 overflow-y-scroll">
-							{(data.tasks.length === 0) && (
-								<p class="place-self-center text-gray-500 text-lg select-none">
-									Tidak ada tugas.
-								</p>
-							)}
-							{data.tasks.map((task) => (
-								<Task task={task}></Task>
-							))}
 						</div>
 					</div>
 				)
 				: (
 					<div class="space-y-6 grid place-items-center w-full max-w-72 select-none">
-						<p class="font-bold text-lg place-self-center">
+						<p class="font-bold text-lg md:text-xl place-self-center">
 							Welcome to exam app!!
 						</p>
 						<div class="space-y-1 w-full grid place-items-center">

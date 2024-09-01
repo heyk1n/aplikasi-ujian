@@ -1,14 +1,34 @@
 import { useState } from "preact/hooks";
+import { IS_BROWSER } from "@fresh/core/runtime";
+
 import Choice from "../components/choice.tsx";
 import Countdown from "./countdown.tsx";
-import { type Task } from "../utils/task.ts";
+import {
+	type AnswerSubmission,
+	type Choice as TChoice,
+	type Task,
+} from "../utils/mod.ts";
 
-export default function ({ task }: { task: Task }) {
+export default function ({ task, token }: { task: Task; token: string }) {
 	const [questionId, setQuestionId] = useState(0);
 	const { text, choices } = task.questions[questionId];
-	const [myChoices, setMyChoices] = useState<(number | null)[]>(
+	const [myChoices, setMyChoices] = useState<TChoice[]>(
 		task.questions.map(() => null),
 	);
+
+	async function handleSubmit(token: string, choices: TChoice[]) {
+		const response = await fetch(`/api/tasks/${task.id}/answers`, {
+			method: "POST",
+			headers: {
+				authorization: token,
+			},
+			body: JSON.stringify({ choices } satisfies AnswerSubmission),
+		});
+
+		if (response.ok && IS_BROWSER) {
+			window.location.href = "/";
+		}
+	}
 
 	return (
 		<div class="flex flex-col h-full space-y-3 select-none">
@@ -63,7 +83,12 @@ export default function ({ task }: { task: Task }) {
 				</div>
 			</div>
 			{!myChoices.includes(null) && (
-				<button class="bg-gradient-to-r from-yellow-300 to-yellow-500 text-black py-2 grid place-items-center rounded-full w-full">
+				<button
+					onClick={async () => {
+						await handleSubmit(token, myChoices);
+					}}
+					class="bg-gradient-to-r from-yellow-300 to-yellow-500 text-black py-2 grid place-items-center rounded-full w-full"
+				>
 					Complete Task
 				</button>
 			)}

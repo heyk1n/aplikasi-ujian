@@ -25,6 +25,7 @@
 		"@preact/signals": "npm:@preact/signals@^1.2.3",
 		"@sapphire/snowflake": "npm:@sapphire/snowflake@3.5.3",
 		"@std/http": "jsr:@std/http@^0.224.3",
+		"imagekit": "npm:imagekit@5.0.1",
 		"preact": "npm:preact@^10.22.0",
 		"tailwindcss": "npm:tailwindcss@3.4.3",
 		"tailwindcss/defaultTheme": "npm:tailwindcss@3.4.3/defaultTheme.js",

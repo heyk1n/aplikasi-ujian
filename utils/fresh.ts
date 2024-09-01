@@ -4,3 +4,8 @@ import { createDefine } from "@fresh/core";
 export interface State {}
 
 export const define = createDefine<State>();
+
+export enum TabsType {
+	Tasks = "tasks",
+	Users = "users",
+}

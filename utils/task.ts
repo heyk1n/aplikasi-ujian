@@ -28,6 +28,30 @@ export async function createTask(
 	}
 }
 
+export async function submitAnswer(
+	token: string,
+	taskId: string,
+	data: AnswerSubmission,
+) {
+	return await fetch(`/api/tasks/${taskId}/answers`, {
+		method: "POST",
+		headers: {
+			authorization: token,
+		},
+		body: JSON.stringify(data),
+	});
+}
+
+export function isCompleted(choices: Choice[]): choices is number[] {
+	return !choices.includes(null);
+}
+
+export type Choice = number | null;
+
+export interface AnswerSubmission {
+	choices: Choice[];
+}
+
 export type CreateTaskOptions = Omit<Task, "id" | "author">;
 
 export interface Task {

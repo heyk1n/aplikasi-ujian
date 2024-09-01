@@ -3,6 +3,7 @@ import {
 	generateToken,
 	kv,
 	resolveAuthUser,
+	SESSION_EXPIRE,
 	type User,
 	UserType,
 } from "../../utils/mod.ts";
@@ -27,7 +28,9 @@ export const handler = define.handlers({
 			const userId = user.id;
 			const token = generateToken();
 
-			await kv.atomic().set(["sessions", token], userId).set(
+			await kv.atomic().set(["sessions", token], userId, {
+				expireIn: SESSION_EXPIRE * 1_000,
+			}).set(
 				["users", userId],
 				{
 					avatar_url: user.avatar_url,
@@ -39,12 +42,13 @@ export const handler = define.handlers({
 
 			const headers = new Headers();
 
-			headers.set("location", "/");
+			headers.set("location", "/?tab=tasks");
 			setCookie(headers, {
 				name: "token",
 				value: token,
 				path: "/",
 				secure: true,
+				maxAge: SESSION_EXPIRE,
 			});
 
 			return new Response(null, {

@@ -6,7 +6,8 @@
 		"vscode": {
 			"extensions": [
 				"ms-azuretools.vscode-docker",
-				"denoland.vscode-deno"
+				"denoland.vscode-deno",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	}

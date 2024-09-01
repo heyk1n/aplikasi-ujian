@@ -2,6 +2,8 @@ import { kv } from "./mod.ts";
 import { STATUS_CODE } from "@std/http/status";
 import { HttpError } from "@fresh/core";
 
+export const SESSION_EXPIRE = 28_800;
+
 export function generateToken() {
 	return `kin.${crypto.randomUUID().replaceAll("-", "")}`;
 }
@@ -24,6 +26,14 @@ export async function resolveUser(token: string): Promise<User> {
 	}
 }
 
+export function isAdminUser(user: User): user is AdminUser {
+	return user.type === UserType.Admin;
+}
+
+export function isStudentUser(user: User): user is StudentUser {
+	return user.type === UserType.Student;
+}
+
 export function isTeacherUser(user: User): user is TeacherUser {
 	return user.type === UserType.Teacher;
 }
@@ -39,6 +49,7 @@ export interface BaseUser<T extends UserType> {
 	username: string;
 	id: string;
 	type: T;
+	token: string;
 }
 
 export interface StudentUser extends BaseUser<UserType.Student> {
@@ -49,6 +60,6 @@ export interface TeacherUser extends BaseUser<UserType.Teacher> {
 	tasks: string[];
 }
 
-export type AdminUser = BaseUser<UserType.Admin>;
+export type AdminUser = Omit<BaseUser<UserType.Admin>, "token">;
 
 export type User = StudentUser | TeacherUser | AdminUser;
